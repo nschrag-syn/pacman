@@ -1242,7 +1242,13 @@ var readyNewState = newChildObject(readyState, {
         // increment level and ready the next map
         level++;
         if (gameMode == GAME_PACMAN) {
-            map = mapPacman;
+            // TEST BUG: load broken map on second level
+            if(level <= 1) {
+                map = mapPacman;
+            } else {
+                map = mapPacmanBroken;
+            }
+
         }
         else if (gameMode == GAME_MSPACMAN || gameMode == GAME_OTTO) {
             setNextMsPacMap();
@@ -1310,8 +1316,11 @@ var playState = {
             g = ghosts[i];
             if (g.tile.x == pacman.tile.x && g.tile.y == pacman.tile.y && g.mode == GHOST_OUTSIDE) {
                 if (g.scared) { // eat ghost
-                    energizer.addPoints();
-                    g.onEaten();
+                    // TEST-BUG: red ghost cannot be eaten
+                    if(i != 0) {
+                        energizer.addPoints();
+                        g.onEaten();
+                    }
                 }
                 else if (pacman.invincible) // pass through ghost
                     continue;
@@ -1550,6 +1559,8 @@ var deadState = (function() {
                     renderer.endMapClip();
                 },
                 init: function() { // leave
+                    // TEST-BUG: infinite lives
+                    if(extraLives == 0) extraLives = 1;
                     switchState( extraLives == 0 ? overState : readyRestartState);
                 }
             },

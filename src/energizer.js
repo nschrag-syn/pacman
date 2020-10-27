@@ -100,7 +100,8 @@ var energizer = (function() {
             return points;
         },
         addPoints: function() {
-            addScore(points*=2);
+            // TEST-BUG: ghost points do not tally
+            points*=2;
             pointsFramesLeft = pointsDuration*60;
         },
         showingPoints: function() { return pointsFramesLeft > 0; },

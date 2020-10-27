@@ -158,6 +158,58 @@ mapPacman.constrainGhostTurns = function(tile,openTiles) {
     }
 };
 
+// TEST-BUG: out of bounds pellets
+// Broken Original Pac-Man map
+var mapPacmanBroken = new Map(28, 36, (
+    "____________________________" +
+    "____________________________" +
+    "____________________________" +
+    "||||||||||||||||||||||||||||" +
+    "|............||............|" +
+    "|.||||.|||||.||.|||||.||||.|" +
+    "|o||||.|||||.||.|||||.||||o|" +
+    "|.||||.|||||.||.|||||.||||.|" +
+    "|..........................|" +
+    "|.||||.||.||||||||.||.||||.|" +
+    "|.||||.||.||||||||.||.||||.|" +
+    "|......||....||....||......|" +
+    "||||||.||||| || |||||.||||||" +
+    "_____|.||||| || |||||.|_____" +
+    "___._|.||          ||.|_.___" +
+    "_____|.|| |||--||| ||.|_____" +
+    "||||||.|| |______| ||.||||||" +
+    "      .   |______|   .      " +
+    "||||||.|| |______| ||.||||||" +
+    "_____|.|| |||||||| ||.|_____" +
+    "_____|.||          ||.|_____" +
+    "_____|.|| |||||||| ||.|_____" +
+    "||||||.|| |||||||| ||.||||||" +
+    "|............||............|" +
+    "|.||||.|||||.||.|||||.||||.|" +
+    "|.||||.|||||.||.|||||.||||.|" +
+    "|o..||.......  .......||..o|" +
+    "|||.||.||.||||||||.||.||.|||" +
+    "|||.||.||.||||||||.||.||.|||" +
+    "|......||....||....||......|" +
+    "|.||||||||||.||.||||||||||.|" +
+    "|.||||||||||.||.||||||||||.|" +
+    "|..........................|" +
+    "||||||||||||||||||||||||||||" +
+    "____________________________" +
+    "____________________________"));
+
+mapPacmanBroken.name = "Pac-Man";
+//mapPacmanBroken.wallStrokeColor = "#47b897"; // from Pac-Man Plus
+mapPacmanBroken.wallStrokeColor = "#2121ff"; // from original
+mapPacmanBroken.wallFillColor = "#000";
+mapPacmanBroken.pelletColor = "#ffb8ae";
+mapPacmanBroken.constrainGhostTurns = function(tile,openTiles) {
+    // prevent ghost from turning up at these tiles
+    if ((tile.x == 12 || tile.x == 15) && (tile.y == 14 || tile.y == 26)) {
+        openTiles[DIR_UP] = false;
+    }
+};
+
 // Levels are grouped into "acts."
 // In Ms. Pac-Man (and Cookie-Man) a map only changes after the end of an act.
 // The levels within an act progress in difficulty.

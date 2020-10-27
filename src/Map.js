@@ -371,6 +371,9 @@ Map.prototype.isFloorTileChar = function(tile) {
 
 // determines if the given tile coordinate has a walkable floor tile
 Map.prototype.isFloorTile = function(x,y) {
+    // TEST-BUG: walls in one area do not have collision
+    if(y == 29 && 1 <= x && x <=26) return true;
+
     return this.isFloorTileChar(this.getTile(x,y));
 };
 

@@ -349,6 +349,8 @@ var atlas = (function(){
                 row = 3;
             }
             else if (color == clyde.color) {
+                // TEST-BUG: orange ghost's eyes look in opposite dir
+                col = (col + 4) % 8;
                 row = 4;
             }
             else {
