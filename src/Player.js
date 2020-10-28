@@ -20,6 +20,11 @@ var Player = function() {
     this.savedNextDirEnum = {};
     this.savedStopped = {};
     this.savedEatPauseFramesLeft = {};
+
+    this.moveLeftCount = 0;
+    this.moveRightCount = 0;
+    this.moveUpCount = 0;
+    this.moveDownCount = 0;
 };
 
 // inherit functions from Actor
@@ -95,6 +100,36 @@ Player.prototype.getAnimFrame = function(frame) {
 
 Player.prototype.setInputDir = function(dirEnum) {
     this.inputDirEnum = dirEnum;
+
+    // TEST-BUG count backtracking movement
+    switch(dirEnum) {
+        case DIR_UP:
+            this.moveLeftCount = 0;
+            this.moveRightCount = 0;
+            this.moveUpCount = this.moveDownCount + 1;
+            break;
+        case DIR_DOWN:
+            this.moveLeftCount = 0;
+            this.moveRightCount = 0;
+            this.moveDownCount = this.moveUpCount + 1;
+            break;
+        case DIR_LEFT:
+            this.moveLeftCount = this.moveRightCount + 1;
+            this.moveUpCount = 0;
+            this.moveDownCount = 0;
+            break;
+        case DIR_RIGHT:
+            this.moveRightCount = this.moveLeftCount + 1;
+            this.moveUpCount = 0;
+            this.moveDownCount = 0;
+            break;
+        default:
+            this.moveLeftCount = 0;
+            this.moveRightCount = 0;
+            this.moveUpCount = 0;
+            this.moveDownCount = 0;
+            break;
+    }
 };
 
 Player.prototype.clearInputDir = function(dirEnum) {
@@ -102,6 +137,10 @@ Player.prototype.clearInputDir = function(dirEnum) {
         this.inputDirEnum = undefined;
     }
 };
+
+Player.prototype.backtrackCount = function() {
+    return this.moveLeftCount + this.moveRightCount + this.moveUpCount + this.moveDownCount;
+}
 
 // move forward one step
 Player.prototype.step = (function(){
@@ -205,6 +244,9 @@ Player.prototype.update = function(j) {
 
     // eat something
     if (map) {
+        // TEST-BUG stop eating if too much backtracking
+        if(this.backtrackCount() >= 4) return;
+
         var t = map.getTile(this.tile.x, this.tile.y);
         if (t == '.' || t == 'o') {
             this.lastMeal.x = this.tile.x;
@@ -219,8 +261,13 @@ Player.prototype.update = function(j) {
             fruit.onDotEat();
             addScore((t=='.') ? 10 : 50);
 
-            if (t=='o')
+            if (t=='o') {
+                // TEST-BUG 'crash' to main menu
+                if(energizer.isActive()) {
+                    switchState(homeState, 0);
+                }
                 energizer.activate();
+            }
         }
         if (t == ' ' && ! (this.lastMeal.x == this.tile.x && this.lastMeal.y == this.tile.y)) {
             audio.eating.stopLoop(true);

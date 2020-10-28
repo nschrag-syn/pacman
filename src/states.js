@@ -112,7 +112,7 @@ var homeState = (function(){
         });
     menu.addTextIconButton(getGameName(GAME_MSPACMAN),
         function() {
-            gameMode = GAME_MSPACMAN;
+            gameMode = GAME_PACMAN;
             exitTo(preNewGameState);
         },
         function(ctx,x,y,frame) {
@@ -120,7 +120,7 @@ var homeState = (function(){
         });
     menu.addTextIconButton(getGameName(GAME_COOKIE),
         function() {
-            gameMode = GAME_COOKIE;
+            gameMode = GAME_PACMAN;
             exitTo(preNewGameState);
         },
         function(ctx,x,y,frame) {
@@ -130,7 +130,8 @@ var homeState = (function(){
     menu.addSpacer(0.5);
     menu.addTextIconButton("LEARN",
         function() {
-            exitTo(learnState);
+            gameMode = GAME_PACMAN;
+            exitTo(preNewGameState);
         },
         function(ctx,x,y,frame) {
             atlas.drawGhostSprite(ctx,x,y,Math.floor(frame/8)%2,DIR_RIGHT,false,false,false,blinky.color);
@@ -465,22 +466,22 @@ var preNewGameState = (function() {
             practiceMode = false;
             turboMode = true;
             newGameState.setStartLevel(1);
-            exitTo(newGameState, 60);
+            //exitTo(newGameState, 60); TEST-BUG
         });
     menu.addTextButton("PRACTICE",
         function() { 
             practiceMode = true;
             turboMode = false;
-            exitTo(selectActState);
+            //exitTo(selectActState); TEST-BUG
         });
     menu.addSpacer(0.5);
     menu.addTextButton("CUTSCENES",
         function() { 
-            exitTo(cutSceneMenuState);
+            //exitTo(cutSceneMenuState); TEST-BUG
         });
     menu.addTextButton("ABOUT",
         function() { 
-            exitTo(aboutGameState);
+            //exitTo(aboutGameState); TEST-BUG
         });
     menu.addSpacer(0.5);
     menu.addTextButton("BACK",

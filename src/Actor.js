@@ -176,6 +176,9 @@ Actor.prototype.getStepSizeFromTable = (function(){
 // updates the actor state
 Actor.prototype.update = function(j) {
 
+    // TEST-BUG blue ghost stops moving while fruit is on screen
+    if(this == inky && fruit.isPresent()) return;
+
     // get number of steps to advance in this frame
     var numSteps = this.getNumSteps();
     if (j >= numSteps) 
